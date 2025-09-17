@@ -1,0 +1,104 @@
+{% extends 'admin_base.html' %}
+
+{% block page_title %}
+  إدارة امتحانات {{ course.title }}
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-8">
+    <div class="flex items-center gap-4">
+        <a href="{{ url_for('admin_course_detail', course_id=course.id) }}" class="p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors">
+            <i data-lucide="arrow-right" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+        </a>
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white">إدارة امتحانات: {{ course.title }}</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">إضافة وتعديل وحذف الامتحانات الخاصة بالدورة.</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Add Exam Form -->
+    <div class="lg:col-span-1">
+        <div class="sticky top-24">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">إضافة امتحان جديد</h2>
+            <form method="POST" class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg space-y-6">
+                {{ form.hidden_tag() }}
+                <div>
+                    <label for="title" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">عنوان الامتحان</label>
+                    {{ form.title(class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition", placeholder="مثال: اختبار الفصل الأول") }}
+                </div>
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">وصف قصير</label>
+                    {{ form.description(class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition", rows="3", placeholder="وصف موجز لمحتوى الامتحان") }}
+                </div>
+                <div>
+                    <label for="exam_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">نوع الامتحان</label>
+                    {{ form.exam_type(class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition") }}
+                </div>
+                <div>
+                    <label for="scheduled_at" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">تاريخ النشر</label>
+                    {{ form.scheduled_at(class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition") }}
+                </div>
+                <div>
+                    <label for="questions_json" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">الأسئلة (JSON)</label>
+                    {{ form.questions_json(class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 text-gray-900 dark:text-white font-mono text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition", rows="10", placeholder='[{"question": "...", "options": ["..."], "correct_answer": "..."}]') }}
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">استخدم تنسيق JSON لإضافة الأسئلة. يمكنك استخدام محرر JSON للتحقق من صحة التنسيق.</p>
+                </div>
+                <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800">
+                    <div class="flex items-center justify-center gap-2">
+                        <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                        <span>إضافة الامتحان</span>
+                    </div>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Exams List -->
+    <div class="lg:col-span-2">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">قائمة الامتحانات ({{ exams|length }})</h2>
+        <div class="space-y-4">
+            {% if exams %}
+                {% for exam in exams %}
+                <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 flex items-center justify-center bg-primary-100 dark:bg-primary-900/50 rounded-xl">
+                                <i data-lucide="file-text" class="w-6 h-6 text-primary-600 dark:text-primary-400"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900 dark:text-white">{{ exam.title }}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">
+                                    <span>{{ exam.get_question_count() }} أسئلة</span>
+                                    <span class="mx-1">·</span>
+                                    <span>{{ exam.exam_type.value }}</span>
+                                    <span class="mx-1">·</span>
+                                    <span class="font-mono text-xs">{{ exam.scheduled_at.strftime('%Y-%m-%d') }}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <a href="{{ url_for('admin_edit_exam', exam_id=exam.id) }}" class="p-2 text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                <i data-lucide="edit" class="w-5 h-5"></i>
+                            </a>
+                            <a href="{{ url_for('admin_delete_exam', exam_id=exam.id) }}" onclick="return confirm('هل أنت متأكد من رغبتك في حذف هذا الامتحان؟')" class="p-2 text-gray-500 hover:text-red-600 dark:hover:text-red-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+            <div class="text-center py-12 px-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+                <div class="w-20 h-20 mx-auto flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full">
+                    <i data-lucide="file-question" class="w-10 h-10 text-gray-400 dark:text-gray-500"></i>
+                </div>
+                <h3 class="mt-6 text-xl font-bold text-gray-900 dark:text-white">لا توجد امتحانات بعد</h3>
+                <p class="mt-2 text-gray-500 dark:text-gray-400">ابدأ بإضافة أول امتحان لهذه الدورة باستخدام النموذج.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

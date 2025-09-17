@@ -1,0 +1,101 @@
+{% extends 'admin_base.html' %}
+
+{% block page_title %}
+  إدارة فيديوهات: {{ course.title }}
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-8">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">إدارة الفيديوهات</h1>
+    <p class="text-gray-500 dark:text-gray-400 mt-1">الدورة: <a href="{{ url_for('admin_course_detail', course_id=course.id) }}" class="text-primary-600 dark:text-primary-400 hover:underline">{{ course.title }}</a></p>
+  </div>
+  <a href="{{ url_for('admin_course_detail', course_id=course.id) }}" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold py-3 px-5 rounded-lg transition-colors flex items-center gap-2">
+      <i data-lucide="arrow-left" class="w-5 h-5"></i>
+      <span>العودة لإدارة الدورة</span>
+  </a>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+  <!-- Add Video Form -->
+  <div class="lg:col-span-1">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 sticky top-8">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">إضافة فيديو جديد</h2>
+      <form method="POST" enctype="multipart/form-data" class="space-y-5">
+        {{ form.hidden_tag() }}
+        <div>
+          {{ form.title.label(class="font-semibold text-gray-700 dark:text-gray-300 mb-2 block") }}
+          <div class="relative">
+            <i data-lucide="type" class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2"></i>
+            {{ form.title(class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg pl-4 pr-10 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition", placeholder="عنوان الفيديو") }}
+          </div>
+          {% for error in form.title.errors %}
+            <span class="text-red-500 text-sm mt-1">{{ error }}</span>
+          {% endfor %}
+        </div>
+        
+        <div>
+          {{ form.file.label(class="font-semibold text-gray-700 dark:text-gray-300 mb-2 block") }}
+          {{ form.file(class="w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 dark:file:bg-primary-900/50 file:text-primary-700 dark:file:text-primary-300 hover:file:bg-primary-100 dark:hover:file:bg-primary-900") }}
+          {% for error in form.file.errors %}
+            <span class="text-red-500 text-sm mt-1">{{ error }}</span>
+          {% endfor %}
+        </div>
+
+        <div>
+          {{ form.timestamps.label(class="font-semibold text-gray-700 dark:text-gray-300 mb-2 block") }}
+          <div class="relative">
+              <i data-lucide="clock" class="w-5 h-5 text-gray-400 absolute right-3 top-4"></i>
+              {{ form.timestamps(class="w-full bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg pl-4 pr-10 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition", rows="3", placeholder='[\n  {\"time\": \"00:05\", \"title\": \"مقدمة\"},\n  {\"time\": \"02:30\", \"title\": \"شرح المفهوم الأساسي\"}\n]') }}
+          </div>
+          <small class="text-gray-500 dark:text-gray-400 mt-1 block">اختياري: أضف الطوابع الزمنية بصيغة JSON.</small>
+        </div>
+
+        <button type="submit" class="w-full flex items-center justify-center bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800">
+          <i data-lucide="plus-circle" class="w-5 h-5 mr-2"></i>
+          <span>إضافة الفيديو</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Videos List -->
+  <div class="lg:col-span-2">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+      <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">قائمة الفيديوهات ({{ videos|length }})</h2>
+      </div>
+      {% if videos %}
+      <div class="divide-y divide-gray-200 dark:divide-gray-700">
+        {% for video in videos %}
+        <div class="p-6 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+          <div class="flex items-center gap-4">
+            <div class="bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 p-3 rounded-full flex-shrink-0">
+                <i data-lucide="video" class="w-6 h-6"></i>
+            </div>
+            <div>
+              <p class="font-bold text-gray-900 dark:text-white">{{ video.title }}</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">{{ video.file_path }} &bull; أضيف بتاريخ {{ video.created_at.strftime('%Y-%m-%d') }}</p>
+            </div>
+          </div>
+          <form method="POST" action="{{ url_for('admin_delete_video', course_id=course.id, video_id=video.id) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذا الفيديو؟')">
+            <button type="submit" class="p-2 text-gray-500 hover:text-red-600 dark:hover:text-red-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="حذف الفيديو">
+              <i data-lucide="trash-2" class="w-5 h-5"></i>
+            </button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="text-center py-20 px-6">
+        <div class="w-24 h-24 mx-auto flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full">
+            <i data-lucide="video-off" class="w-12 h-12 text-gray-400 dark:text-gray-500"></i>
+        </div>
+        <h3 class="mt-6 text-xl font-bold text-gray-900 dark:text-white">لا توجد فيديوهات بعد</h3>
+        <p class="mt-2 text-gray-500 dark:text-gray-400">استخدم النموذج على اليسار لإضافة أول فيديو في الدورة.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

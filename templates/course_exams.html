@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">امتحانات: {{ course.title }}</h1>
+
+{% if exams %}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {% for exam in exams %}
+  <div class="bg-white rounded shadow p-6">
+    <h2 class="text-xl font-semibold mb-2">{{ exam.title }}</h2>
+    {% if exam.description %}
+    <p class="text-gray-600 mb-4">{{ exam.description }}</p>
+    {% endif %}
+    
+    <div class="mb-4 text-sm text-gray-500">
+      <p><strong>النوع:</strong> {{ 'امتحان شهري' if exam.exam_type == 'monthly' else 'امتحان بعد المحاضرة' }}</p>
+      {% if exam.scheduled_date %}
+      <p><strong>الموعد:</strong> {{ exam.scheduled_date.strftime('%Y-%m-%d %H:%M') }}</p>
+      {% endif %}
+      <p><strong>عدد الأسئلة:</strong> {{ exam.get_questions()|length }}</p>
+    </div>
+    
+    {% if session.get('student_id') %}
+    <a href="{{ url_for('take_exam', slug=course.slug, exam_id=exam.id) }}" class="bg-blue-500 text-white px-4 py-2 rounded inline-block">بدء الامتحان</a>
+    {% else %}
+    <p class="text-red-500">يجب تسجيل الدخول لأداء الامتحان</p>
+    <a href="{{ url_for('student_login') }}" class="bg-blue-500 text-white px-4 py-2 rounded inline-block mt-2">تسجيل الدخول</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="bg-white p-6 rounded shadow text-center">
+  <p class="text-gray-500">لا توجد امتحانات متاحة لهذه الدورة بعد.</p>
+</div>
+{% endif %}
+
+<div class="mt-6">
+  <a href="{{ url_for('course_detail', slug=course.slug) }}" class="bg-gray-500 text-white px-4 py-2 rounded">العودة للدورة</a>
+</div>
+{% endblock %}

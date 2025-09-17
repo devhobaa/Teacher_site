@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-16">
+  <div class="container mx-auto px-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">الدورات التعليمية</h1>
+    <p class="text-xl text-primary-100">اختر الدورة المناسبة لك وابدأ رحلة التفوق في الرياضة</p>
+  </div>
+</section>
+
+<!-- Courses Grid -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-6">
+    {% if courses %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for course in courses %}
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+        <div class="h-48 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center relative">
+          {% if course.image %}
+            <img src="{{ url_for('uploads', filename=course.image) }}" alt="{{ course.title }}" class="w-full h-full object-cover">
+          {% else %}
+            <i data-lucide="calculator" class="w-16 h-16 text-white"></i>
+          {% endif %}
+          
+          {% if course.featured %}
+          <div class="absolute top-4 right-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            مميزة
+          </div>
+          {% endif %}
+        </div>
+        
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800 mb-3">{{ course.title }}</h3>
+          <p class="text-gray-600 mb-4 leading-relaxed">{{ course.short_desc }}</p>
+          
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <span class="text-2xl font-bold text-primary-600">{{ course.price }}</span>
+              <span class="text-gray-500 mr-1">جنيه</span>
+            </div>
+            <div class="flex items-center text-yellow-500">
+              {% for i in range(5) %}
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              {% endfor %}
+              <span class="text-gray-500 text-sm mr-1">(5.0)</span>
+            </div>
+          </div>
+          
+          <div class="flex items-center text-gray-500 text-sm mb-4">
+            <i data-lucide="clock" class="w-4 h-4 ml-1"></i>
+            <span>20 ساعة تدريبية</span>
+            <i data-lucide="users" class="w-4 h-4 ml-3 mr-1"></i>
+            <span>{{ course.students|length }} طالب</span>
+          </div>
+          
+          <div class="flex gap-2">
+            <a href="{{ url_for('course_detail', slug=course.slug) }}" 
+               class="flex-1 bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors font-semibold text-center">
+              عرض التفاصيل
+            </a>
+            {% if current_user.is_authenticated %}
+            {% if course not in current_user.courses %}
+            <form method="POST" action="{{ url_for('subscribe_course', slug=course.slug) }}" class="inline-block">
+              <button type="submit" 
+                      class="bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold">
+                سجل في الدورة
+              </button>
+            </form>
+            {% else %}
+            <div class="bg-gray-200 text-gray-700 py-3 px-4 rounded-lg text-center font-semibold">
+              مسجل بالفعل
+            </div>
+            {% endif %}
+            {% else %}
+            <a href="{{ url_for('student_login') }}" 
+               class="bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 transition-colors font-semibold">
+              سجل في الدورة
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-16">
+      <div class="bg-white rounded-2xl p-12 max-w-md mx-auto shadow-lg">
+        <i data-lucide="book-open" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">لا توجد دورات متاحة حالياً</h3>
+        <p class="text-gray-600 mb-6">سيتم إضافة دورات جديدة قريباً</p>
+        <a href="{{ url_for('contact') }}" 
+           class="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors">
+          تواصل معنا
+        </a>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Why Choose Our Courses -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary-800 mb-4">لماذا تختار دوراتنا؟</h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        نقدم تجربة تعليمية متميزة تضمن لك التفوق في الرياضة
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="text-center">
+        <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <i data-lucide="user-check" class="w-8 h-8 text-primary-600"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">مدرس رياضة خبير</h3>
+        <p class="text-gray-600">خبرة أكثر من 15 عاماً في تدريس الرياضة</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <i data-lucide="video" class="w-8 h-8 text-primary-600"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">محتوى تفاعلي</h3>
+        <p class="text-gray-600">فيديوهات عالية الجودة وأمثلة تطبيقية</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <i data-lucide="headphones" class="w-8 h-8 text-primary-600"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">دعم مستمر</h3>
+        <p class="text-gray-600">متابعة شخصية والإجابة على الاستفسارات</p>
+      </div>
+      
+      <div class="text-center">
+        <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <i data-lucide="award" class="w-8 h-8 text-primary-600"></i>
+        </div>
+        <h3 class="text-lg font-bold mb-2">شهادة معتمدة</h3>
+        <p class="text-gray-600">احصل على شهادة إتمام الدورة</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-primary-600 text-white">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl font-bold mb-4">هل أنت مستعد للبدء؟</h2>
+    <p class="text-xl mb-8 text-primary-100 max-w-2xl mx-auto">
+      انضم إلى آلاف الطلاب الذين حققوا التفوق في الرياضة
+    </p>
+    <a href="{{ url_for('register') }}" 
+       class="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center">
+      <i data-lucide="user-plus" class="w-5 h-5 ml-2"></i>
+      سجل الآن مجاناً
+    </a>
+  </div>
+</section>
+{% endblock %}

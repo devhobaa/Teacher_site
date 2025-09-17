@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap');
+
+:root {
+  --primary-600: #ff6b35;
+  --primary-700: #f7931e;
+  --primary-800: #e8661f;
+  --primary-100: #fff5f0;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --white: #ffffff;
+}
+
+/* Hero Background with enhanced abstract shapes */
+section {
+  position: relative;
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-800));
+  overflow: hidden;
+  padding: 4rem 0;
+}
+
+section::before,
+section::after,
+section::nth-child(1)::before,
+section::nth-child(1)::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.08;
+  z-index: 0;
+}
+
+section::before {
+  top: -80px;
+  right: -80px;
+  width: 240px;
+  height: 240px;
+  background: var(--white);
+  animation: floaty 8s ease-in-out infinite;
+}
+
+section::after {
+  bottom: -100px;
+  left: -100px;
+  width: 320px;
+  height: 320px;
+  background: var(--primary-100);
+  animation: floaty 12s ease-in-out infinite reverse;
+}
+
+section::nth-child(1)::before {
+  top: 20%;
+  left: 10%;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.05);
+  animation: floaty 15s ease-in-out infinite;
+  border-radius: 20% 80% 70% 30%;
+}
+
+section::nth-child(1)::after {
+  bottom: 30%;
+  right: 15%;
+  width: 180px;
+  height: 180px;
+  background: rgba(255, 107, 53, 0.1);
+  animation: floaty 20s ease-in-out infinite reverse;
+  border-radius: 60% 40% 30% 70%;
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-25px) rotate(5deg); }
+}
+
+/* Container */
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Form Card with enhanced shadow and border */
+.bg-white {
+  background: var(--white);
+  border-radius: 2rem;
+  box-shadow: 0 30px 80px rgba(255, 107, 53, 0.3), 0 0 0 1px rgba(255, 107, 53, 0.1);
+  transition: all 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-white::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-600), var(--primary-700), var(--primary-800));
+  border-radius: 2rem 2rem 0 0;
+}
+
+.bg-white:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 40px 100px rgba(255, 107, 53, 0.35), 0 0 0 1px rgba(255, 107, 53, 0.15);
+}
+
+/* Inputs and Select with enhanced styling */
+input, select {
+  font-family: 'Cairo', sans-serif;
+  border-radius: 1rem !important;
+  border: 2px solid #ddd;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+input:focus, select:focus {
+  border-color: var(--primary-700);
+  box-shadow: 0 0 10px rgba(255, 107, 53, 0.3), 0 0 0 3px rgba(255, 107, 53, 0.1);
+  outline: none;
+  background: var(--white);
+  transform: translateY(-2px);
+}
+
+/* Submit Button with enhanced effects */
+button[type="submit"] {
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  border: none;
+  border-radius: 1rem;
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 1rem 0;
+  color: var(--white);
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+button[type="submit"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+button[type="submit"]:hover::before {
+  left: 100%;
+}
+
+button[type="submit"]:hover {
+  background: linear-gradient(135deg, var(--primary-700), var(--primary-800));
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 25px rgba(255, 107, 53, 0.4);
+}
+
+/* Left Image with enhanced effects */
+img.rounded-2xl {
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+  transition: all 0.5s ease;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+img.rounded-2xl:hover {
+  transform: scale(1.1) translateY(-8px);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.35);
+}
+
+/* Typography with enhanced spacing */
+h1, h2 {
+  font-family: 'Amiri', serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+p, label, input, select, button, span {
+  font-family: 'Cairo', sans-serif;
+  line-height: 1.5;
+}
+
+/* Icon style with glow effects */
+.badge-icon {
+  width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  vertical-align: middle;
+  stroke-width: 2.5;
+  filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.3));
+  transition: all 0.3s ease;
+}
+
+.badge-icon:hover {
+  filter: drop-shadow(0 4px 8px rgba(255, 107, 53, 0.5));
+  transform: scale(1.1);
+}
+
+/* Form icons with enhanced styling */
+.form-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  vertical-align: middle;
+  stroke-width: 2;
+  filter: drop-shadow(0 1px 2px rgba(255, 107, 53, 0.2));
+  transition: all 0.3s ease;
+}
+
+.form-icon:hover {
+  filter: drop-shadow(0 2px 4px rgba(255, 107, 53, 0.4));
+  transform: scale(1.05);
+}
+
+/* Info Badges container with enhanced effects */
+.border-t .grid div {
+  transition: all 0.3s ease;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 600;
+  color: var(--gray-700);
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.border-t .grid div:hover {
+  transform: translateY(-4px) scale(1.1);
+  color: var(--primary-700);
+  background: rgba(255, 107, 53, 0.1);
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.2);
+}
+
+/* Decorative elements */
+.form-decoration {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(45deg, var(--primary-600), var(--primary-700));
+  border-radius: 50%;
+  opacity: 0.1;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.1; }
+  50% { transform: scale(1.2); opacity: 0.2; }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  section::before, section::after, section::nth-child(1)::before, section::nth-child(1)::after {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.9rem;
+  }
+  h2 {
+    font-size: 1.7rem;
+  }
+  button[type="submit"] {
+    font-size: 1rem;
+  }
+  .form-decoration {
+    display: none;
+  }
+}
+</style>
+
+{% block content %}
+<section class="min-h-screen bg-gradient-to-br from-primary-600 to-primary-800 flex items-center py-16">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- Left Image with caption and icon -->
+      <div class="hidden lg:block text-center text-white">
+        <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+          alt="طلاب يدرسون" class="rounded-2xl shadow-2xl mx-auto mb-6">
+        <h2 class="text-3xl font-bold mb-4 flex justify-center items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="badge-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422A12.083 12.083 0 0112 21.5a12.083 12.083 0 01-6.16-10.922L12 14z" />
+          </svg>
+          انضم إلى عائلة التفوق
+        </h2>
+        <p class="text-xl text-primary-100 max-w-md mx-auto">
+          أكثر من 1000 طالب حققوا التفوق في الرياضة معنا
+        </p>
+      </div>
+
+      <!-- Right Form with decorative elements -->
+      <div class="bg-white rounded-2xl shadow-2xl p-12 relative">
+        <div class="form-decoration"></div>
+        <div class="text-center mb-10">
+          <h1 class="text-4xl font-bold text-gray-800 mb-3">إنشاء حساب جديد</h1>
+          <p class="text-gray-500 text-lg">ابدأ رحلتك التعليمية معنا اليوم</p>
+        </div>
+        <form method="POST" enctype="multipart/form-data" novalidate class="space-y-6">
+          {{ form.hidden_tag() }}
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              {{ form.name.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+              {{ form.name(class="w-full px-4 py-3 bg-gray-50 border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors") }}
+              {% if form.name.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.name.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div>
+              {{ form.phone.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+              {{ form.phone(class="w-full px-4 py-3 bg-gray-50 border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors") }}
+              {% if form.phone.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.phone.errors[0] }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div>
+            {{ form.email.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+            {{ form.email(class="w-full px-4 py-3 bg-gray-50 border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors") }}
+            {% if form.email.errors %}
+            <div class="text-red-500 text-sm mt-1">{{ form.email.errors[0] }}</div>
+            {% endif %}
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              {{ form.password.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+              {{ form.password(class="w-full px-4 py-3 bg-gray-50 border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors") }}
+              {% if form.password.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.password.errors[0] }}</div>
+              {% endif %}
+            </div>
+            <div>
+              {{ form.confirm.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+              {{ form.confirm(class="w-full px-4 py-3 bg-gray-50 border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors") }}
+              {% if form.confirm.errors %}
+              <div class="text-red-500 text-sm mt-1">{{ form.confirm.errors[0] }}</div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div>
+            {{ form.course.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+            {{ form.course(class="w-full px-4 py-3 bg-gray-50 border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors") }}
+            {% if form.course.errors %}
+            <div class="text-red-500 text-sm mt-1">{{ form.course.errors[0] }}</div>
+            {% endif %}
+          </div>
+
+          <div>
+            {{ form.city.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+            {{ form.city(class="w-full px-4 py-3 bg-gray-50 border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors") }}
+            {% if form.city.errors %}
+            <div class="text-red-500 text-sm mt-1">{{ form.city.errors[0] }}</div>
+            {% endif %}
+          </div>
+
+          <div>
+            {{ form.profile_picture.label(class="block text-sm font-medium text-gray-700 mb-2") }}
+            {{ form.profile_picture(class="w-full px-4 py-3 bg-gray-50 border-gray-300 text-gray-800 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors") }}
+            <p class="text-xs text-gray-500 mt-1">اختياري: يمكنك إضافة صورة شخصية</p>
+          </div>
+
+          <button type="submit" class="w-full bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors font-semibold text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+            إنشاء الحساب
+          </button>
+        </form>
+
+        <div class="text-center mt-8 text-gray-600">
+          <p>لديك حساب بالفعل؟ 
+            <a href="{{ url_for('student_login') }}" class="text-primary-600 hover:text-primary-700 font-semibold">
+              تسجيل الدخول
+            </a>
+          </p>
+        </div>
+
+        <div class="border-t border-gray-200 mt-10 pt-8">
+          <div class="grid grid-cols-3 gap-6 text-center text-sm text-gray-700">
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" class="badge-icon text-green-500 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" /></svg> 
+              <span>آمن 100%</span>
+            </div>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" class="badge-icon text-blue-500 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3" /></svg>
+              <span>تسجيل سريع</span>
+            </div>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" class="badge-icon text-purple-500 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+              </svg>
+              <span>مجاني تماماً</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

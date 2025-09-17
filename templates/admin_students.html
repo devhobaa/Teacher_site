@@ -1,0 +1,98 @@
+{% extends 'admin_base.html' %}
+
+{% block page_title %}
+  إدارة الطلاب
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-8">
+    <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">إدارة الطلاب</h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">بحث، تصفية، وتصدير بيانات الطلاب.</p>
+    </div>
+    <a href="{{ url_for('admin_export_students') }}" class="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-5 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800 flex items-center gap-2">
+        <i data-lucide="download" class="w-5 h-5"></i>
+        <span>تصدير CSV</span>
+    </a>
+</div>
+
+<!-- Search and Filter -->
+<div class="mb-6">
+    <form method="GET" class="flex items-center gap-4">
+        <div class="relative flex-1">
+            <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input type="text" name="search" value="{{ search }}" placeholder="البحث بالاسم أو البريد الإلكتروني..." class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg pl-10 pr-4 py-3 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition">
+        </div>
+        <button type="submit" class="bg-gray-800 dark:bg-gray-700 hover:bg-gray-900 dark:hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+            بحث
+        </button>
+    </form>
+</div>
+
+<!-- Students Table -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full table-auto text-right">
+            <thead class="bg-gray-50 dark:bg-gray-700/50">
+                <tr>
+                    <th class="px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-300">الاسم</th>
+                    <th class="px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-300">البريد الإلكتروني</th>
+                    <th class="px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-300">تاريخ التسجيل</th>
+                    <th class="px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-300 text-center">الحالة</th>
+                    <th class="px-6 py-4 text-sm font-semibold text-gray-600 dark:text-gray-300 text-center">الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                {% for student in students %}
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center gap-3">
+                            <img src="{{ student.get_avatar() }}" alt="{{ student.name }}" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <div class="font-bold text-gray-900 dark:text-white">{{ student.name }}</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">ID: {{ student.id }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-700 dark:text-gray-300">{{ student.email }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-gray-500 dark:text-gray-400">{{ student.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        {% if student.active %}
+                            <span class="px-3 py-1 text-xs font-semibold text-green-800 bg-green-100 dark:text-green-200 dark:bg-green-900/50 rounded-full">مفعل</span>
+                        {% else %}
+                            <span class="px-3 py-1 text-xs font-semibold text-red-800 bg-red-100 dark:text-red-200 dark:bg-red-900/50 rounded-full">غير مفعل</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <a href="{{ url_for('admin_toggle_student_active', id=student.id) }}" class="p-2 text-gray-500 hover:text-primary-600 dark:hover:text-primary-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="{{ 'تعطيل' if student.active else 'تفعيل' }}">
+                                <i data-lucide="{{ 'user-check' if not student.active else 'user-x' }}" class="w-5 h-5"></i>
+                            </a>
+                            <a href="{{ url_for('admin_delete_student', id=student.id) }}" onclick="return confirm('هل أنت متأكد من رغبتك في حذف هذا الطالب؟ سيتم حذف جميع بياناته بشكل نهائي.')" class="p-2 text-gray-500 hover:text-red-600 dark:hover:text-red-400 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" title="حذف">
+                                <i data-lucide="trash-2" class="w-5 h-5"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center py-16 px-6">
+                        <div class="w-20 h-20 mx-auto flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-full">
+                            <i data-lucide="users" class="w-10 h-10 text-gray-400 dark:text-gray-500"></i>
+                        </div>
+                        <h3 class="mt-6 text-xl font-bold text-gray-900 dark:text-white">لم يتم العثور على طلاب</h3>
+                        <p class="mt-2 text-gray-500 dark:text-gray-400">لا توجد نتائج تطابق بحثك. حاول تعديل معايير البحث.</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+<div class="mt-8 flex justify-center">
+    <!-- Pagination logic here if needed -->
+</div>
+
+{% endblock %}

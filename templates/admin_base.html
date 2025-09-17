@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{{ title if title else 'لوحة الإدارة' }} - الأستاذ فضل عادل</title>
+  
+  <!-- Google Fonts - Cairo -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'cairo': ['Cairo', 'sans-serif'],
+          },
+          colors: {
+            'primary': {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    body { font-family: 'Cairo', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-800 font-cairo">
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md flex-shrink-0">
+      <div class="p-6">
+        <div class="flex items-center space-x-4 space-x-reverse mb-8">
+          <div class="bg-primary-600 text-white p-2 rounded-lg">
+            <i data-lucide="calculator" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-primary-800">الإدارة</h1>
+            <p class="text-sm text-gray-600">لوحة التحكم</p>
+          </div>
+        </div>
+        <nav class="space-y-2">
+          <a href="{{ url_for('admin_dashboard') }}" class="flex items-center p-3 text-gray-700 hover:bg-primary-600 hover:text-white rounded-lg transition-colors">
+            <i data-lucide="home" class="w-5 h-5 ml-3"></i>
+            <span>الرئيسية</span>
+          </a>
+          <a href="{{ url_for('admin_students') }}" class="flex items-center p-3 text-gray-700 hover:bg-primary-600 hover:text-white rounded-lg transition-colors">
+            <i data-lucide="users" class="w-5 h-5 ml-3"></i>
+            <span>الطلاب</span>
+          </a>
+          <a href="{{ url_for('admin_new_course') }}" class="flex items-center p-3 text-gray-700 hover:bg-primary-600 hover:text-white rounded-lg transition-colors">
+            <i data-lucide="plus" class="w-5 h-5 ml-3"></i>
+            <span>إضافة دورة</span>
+          </a>
+          <a href="{{ url_for('courses') }}" class="flex items-center p-3 text-gray-700 hover:bg-primary-600 hover:text-white rounded-lg transition-colors">
+            <i data-lucide="book-open" class="w-5 h-5 ml-3"></i>
+            <span>الدورات</span>
+          </a>
+          <a href="{{ url_for('admin_messages') }}" class="flex items-center p-3 text-gray-700 hover:bg-primary-600 hover:text-white rounded-lg transition-colors">
+            <i data-lucide="mail" class="w-5 h-5 ml-3"></i>
+            <span>الرسائل</span>
+          </a>
+          <a href="{{ url_for('admin_dashboard') }}" class="flex items-center p-3 text-gray-700 hover:bg-primary-600 hover:text-white rounded-lg transition-colors">
+            <i data-lucide="bar-chart" class="w-5 h-5 ml-3"></i>
+            <span>الإحصائيات</span>
+          </a>
+          <a href="{{ url_for('admin_logout') }}" class="flex items-center p-3 text-red-600 hover:bg-red-600 hover:text-white rounded-lg transition-colors">
+            <i data-lucide="log-out" class="w-5 h-5 ml-3"></i>
+            <span>خروج</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col">
+      <header class="bg-white shadow-sm p-4">
+        <div class="flex items-center justify-between">
+            <h2 class="text-xl font-semibold text-gray-700">{% block page_title %}{% endblock %}</h2>
+            <div class="flex items-center space-x-4 space-x-reverse">
+                <div class="relative">
+                    <button class="p-2 bg-gray-100 rounded-full hover:bg-gray-200">
+                        <i data-lucide="bell" class="w-5 h-5 text-gray-600"></i>
+                    </button>
+                </div>
+                <div class="relative">
+                    <button class="flex items-center space-x-2 space-x-reverse">
+                        <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold">A</div>
+                        <span class="text-gray-700">Admin</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+      </header>
+      
+      <main class="flex-1 p-8">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="container mx-auto px-6 py-4">
+              {% for category, message in messages %}
+                <div class="p-4 rounded-lg mb-4 {{ '''bg-green-100 text-green-800 border border-green-200''' if category=='''success''' else '''bg-red-100 text-red-800 border border-red-200''' if category=='''danger''' else '''bg-blue-100 text-blue-800 border border-blue-200''' if category=='''info''' else '''bg-yellow-100 text-yellow-800 border border-yellow-200''' }}">
+                  <div class="flex items-center">
+                    <i data-lucide="{{ '''check-circle''' if category=='''success''' else '''alert-circle''' if category=='''danger''' else '''info''' if category=='''info''' else '''alert-triangle''' }}" class="w-5 h-5 ml-2"></i>
+                    {{ message }}
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>

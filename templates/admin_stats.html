@@ -1,0 +1,160 @@
+{% extends 'admin_base.html' %}
+
+{% block page_title %}
+  الإحصائيات والتقارير
+{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Students Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <div class="w-14 h-14 flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 rounded-full">
+            <i data-lucide="users" class="w-7 h-7 text-blue-600 dark:text-blue-400"></i>
+        </div>
+        <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">إجمالي الطلاب</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ stats.total_students }}</p>
+        </div>
+    </div>
+
+    <!-- Courses Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <div class="w-14 h-14 flex items-center justify-center bg-green-100 dark:bg-green-900/50 rounded-full">
+            <i data-lucide="book-marked" class="w-7 h-7 text-green-600 dark:text-green-400"></i>
+        </div>
+        <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">إجمالي الدورات</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ stats.total_courses }}</p>
+        </div>
+    </div>
+
+    <!-- Messages Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <div class="w-14 h-14 flex items-center justify-center bg-orange-100 dark:bg-orange-900/50 rounded-full">
+            <i data-lucide="message-square" class="w-7 h-7 text-orange-600 dark:text-orange-400"></i>
+        </div>
+        <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">الرسائل الجديدة</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ stats.new_messages }}</p>
+        </div>
+    </div>
+
+    <!-- Revenue Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <div class="w-14 h-14 flex items-center justify-center bg-purple-100 dark:bg-purple-900/50 rounded-full">
+            <i data-lucide="dollar-sign" class="w-7 h-7 text-purple-600 dark:text-purple-400"></i>
+        </div>
+        <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">الإيرادات (تقديري)</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">$0</p>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8 mb-8">
+    <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">نمو الطلاب</h3>
+        <div class="h-80">
+            <canvas id="studentsChart"></canvas>
+        </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">ملخص الدورات</h3>
+        <div class="h-80 flex items-center justify-center">
+            <canvas id="coursesChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const isDarkMode = document.documentElement.classList.contains('dark');
+
+        const chartTextColor = isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+        const chartGridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+        // Dummy data for charts
+        const studentData = {
+            labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+            datasets: [{
+                label: 'طلاب جدد',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true
+            }]
+        };
+
+        const courseData = {
+            labels: ['مكتملة', 'قيد التقدم', 'جديدة'],
+            datasets: [{
+                label: 'حالة الدورات',
+                data: [5, 10, 2],
+                backgroundColor: [
+                    'rgba(16, 185, 129, 0.7)',
+                    'rgba(245, 158, 11, 0.7)',
+                    'rgba(59, 130, 246, 0.7)'
+                ],
+                borderColor: isDarkMode ? '#1f2937' : '#fff',
+                borderWidth: 3,
+                hoverOffset: 8
+            }]
+        };
+
+        // Students Chart
+        const studentsCtx = document.getElementById('studentsChart').getContext('2d');
+        new Chart(studentsCtx, {
+            type: 'line',
+            data: studentData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: chartTextColor },
+                        grid: { color: chartGridColor }
+                    },
+                    x: {
+                        ticks: { color: chartTextColor },
+                        grid: { color: chartGridColor }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: chartTextColor
+                        }
+                    }
+                }
+            }
+        });
+
+        // Courses Chart
+        const coursesCtx = document.getElementById('coursesChart').getContext('2d');
+        new Chart(coursesCtx, {
+            type: 'doughnut',
+            data: courseData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: chartTextColor
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

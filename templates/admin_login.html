@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+  تسجيل دخول الإدارة
+{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div class="text-center">
+            <a href="{{ url_for('index') }}" class="inline-block mb-6">
+                <img class="mx-auto h-12 w-auto" src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+            </a>
+            <h2 class="mt-4 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+                لوحة تحكم الإدارة
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+                مرحباً بعودتك! الرجاء تسجيل الدخول للمتابعة.
+            </p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="{{ 'bg-red-100 border-red-400 text-red-700' if category == 'error' else 'bg-blue-100 border-blue-400 text-blue-700' }} border px-4 py-3 rounded-lg relative" role="alert">
+                        <span class="block sm:inline">{{ message }}</span>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form class="mt-8 space-y-6 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg" method="POST" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="space-y-6">
+                <div>
+                    {{ form.username.label(class="text-sm font-bold text-gray-700 dark:text-gray-300 tracking-wide") }}
+                    <div class="relative mt-2">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i data-lucide="user" class="w-5 h-5 text-gray-400"></i>
+                        </div>
+                        {{ form.username(class="w-full text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition", placeholder="اسم المستخدم") }}
+                    </div>
+                    {% if form.username.errors %}
+                        <div class="text-red-500 text-xs mt-1">{{ form.username.errors[0] }}</div>
+                    {% endif %}
+                </div>
+                <div>
+                    {{ form.password.label(class="text-sm font-bold text-gray-700 dark:text-gray-300 tracking-wide") }}
+                    <div class="relative mt-2">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i data-lucide="lock" class="w-5 h-5 text-gray-400"></i>
+                        </div>
+                        {{ form.password(class="w-full text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition", placeholder="••••••••") }}
+                    </div>
+                    {% if form.password.errors %}
+                        <div class="text-red-500 text-xs mt-1">{{ form.password.errors[0] }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-6">
+                <div class="flex items-center">
+                    {{ form.remember(class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700") }}
+                    {{ form.remember.label('تذكرني', class="mr-2 block text-sm text-gray-900 dark:text-gray-300") }}
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <button type="submit" class="w-full flex justify-center items-center gap-2 bg-primary-600 hover:bg-primary-700 text-gray-100 p-3 rounded-lg tracking-wide font-semibold cursor-pointer transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:focus:ring-primary-800">
+                    <i data-lucide="log-in" class="w-5 h-5"></i>
+                    <span>تسجيل الدخول</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

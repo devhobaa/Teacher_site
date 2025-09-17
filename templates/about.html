@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  
+</style>
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-16">
+  <div class="container mx-auto px-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">من أنا</h1>
+    <p class="text-xl text-primary-100">تعرف على الأستاذ فضل عادل</p>
+  </div>
+</section>
+
+<!-- About Content -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+      <div class="text-center lg:text-right">
+        <img src="{{ url_for('uploads', filename='T.fadl.jpg') }}" 
+             alt="الأستاذ فضل عادل" 
+             class="rounded-2xl shadow-2xl mx-auto lg:mx-0 w-96 h-96 object-cover">
+      </div>
+      <div>
+        <h2 class="text-3xl font-bold text-primary-800 mb-6">الأستاذ فضل عادل</h2>
+        <p class="text-gray-700 text-lg mb-6 leading-relaxed">
+          مرحباً بكم، أنا فضل عادل، مدرس رياضة متخصص بخبرة تزيد عن 15 عاماً في تدريس الرياضة 
+          للمرحلة الثانوية. أؤمن بأن الرياضة ليست مجرد نشاط بدني، بل هي أسلوب حياة يساعدنا 
+          على فهم العالم من حولنا.
+        </p>
+        <p class="text-gray-700 text-lg mb-6 leading-relaxed">
+          هدفي هو تبسيط الرياضة وجعلها ممتعة ومفهومة لجميع الطلاب، بغض النظر عن مستواهم الأكاديمي. 
+          أستخدم طرق تدريس حديثة ومبتكرة تجعل الطالب يحب الرياضة ويتفوق فيها.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Qualifications -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-6">
+    <h2 class="text-3xl font-bold text-primary-800 text-center mb-12">المؤهلات والخبرات</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+        <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <i data-lucide="graduation-cap" class="w-8 h-8 text-primary-600"></i>
+        </div>
+        <h3 class="text-xl font-bold text-center mb-3">التعليم الأكاديمي</h3>
+        <ul class="text-gray-600 space-y-2">
+          <li>• بكالوريوس التربية الرياضية - جامعة القاهرة</li>
+          <li>• ماجستير في التربية الرياضية</li>
+          <li>• دبلوم في طرق التدريس الحديثة</li>
+        </ul>
+      </div>
+      
+      <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+        <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <i data-lucide="award" class="w-8 h-8 text-primary-600"></i>
+        </div>
+        <h3 class="text-xl font-bold text-center mb-3">الخبرة العملية</h3>
+        <ul class="text-gray-600 space-y-2">
+          <li>• +15 سنة في تدريس الرياضة</li>
+          <li>• مدرس في مدارس حكومية وخاصة</li>
+          <li>• مؤسس مركز فضل عادل التعليمي</li>
+        </ul>
+      </div>
+      
+      <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow">
+        <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mb-4 mx-auto">
+          <i data-lucide="star" class="w-8 h-8 text-primary-600"></i>
+        </div>
+        <h3 class="text-xl font-bold text-center mb-3">الإنجازات</h3>
+        <ul class="text-gray-600 space-y-2">
+          <li>• تدريب أكثر من 1000 طالب</li>
+          <li>• نسبة نجاح 98% في الثانوية العامة</li>
+          <li>• جائزة أفضل مدرس رياضة 2023</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Teaching Philosophy -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl font-bold text-primary-800 mb-8">فلسفتي في التدريس</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div class="bg-primary-50 rounded-2xl p-6">
+          <div class="bg-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto">
+            <i data-lucide="lightbulb" class="w-6 h-6 text-white"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">التبسيط والوضوح</h3>
+          <p class="text-gray-700">
+            أؤمن بتبسيط المفاهيم المعقدة وتقديمها بطريقة واضحة ومفهومة لجميع الطلاب
+          </p>
+        </div>
+        
+        <div class="bg-primary-50 rounded-2xl p-6">
+          <div class="bg-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto">
+            <i data-lucide="heart" class="w-6 h-6 text-white"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">الشغف والحب</h3>
+          <p class="text-gray-700">
+            أسعى لنقل حبي وشغفي بالرياضة إلى طلابي ليصبحوا محبين لهذا النشاط الجميل
+          </p>
+        </div>
+        
+        <div class="bg-primary-50 rounded-2xl p-6">
+          <div class="bg-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto">
+            <i data-lucide="target" class="w-6 h-6 text-white"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">التركيز على النتائج</h3>
+          <p class="text-gray-700">
+            أركز على تحقيق أفضل النتائج الأكاديمية مع بناء فهم عميق للمادة
+          </p>
+        </div>
+        
+        <div class="bg-primary-50 rounded-2xl p-6">
+          <div class="bg-primary-600 w-12 h-12 rounded-full flex items-center justify-center mb-4 mx-auto">
+            <i data-lucide="users" class="w-6 h-6 text-white"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3">التعلم التفاعلي</h3>
+          <p class="text-gray-700">
+            أشجع المشاركة والتفاعل في الفصل لخلق بيئة تعليمية محفزة وممتعة
+          </p>
+        </div>
+      </div>
+      
+      <blockquote class="text-xl italic text-gray-700 border-r-4 border-primary-600 pr-6 mb-8">
+        "الرياضة ليست مجرد نشاط بدني، بل هي أسلوب حياة يساعد الطلاب على بناء الصحة والقوة في جميع جوانب الحياة"
+      </blockquote>
+      
+      <a href="{{ url_for('contact') }}" 
+         class="bg-primary-600 text-white px-8 py-3 rounded-lg hover:bg-primary-700 transition-colors font-semibold inline-flex items-center">
+        <i data-lucide="phone" class="w-5 h-5 ml-2"></i>
+        تواصل معي
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

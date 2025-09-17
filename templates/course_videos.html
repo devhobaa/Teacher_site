@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="text-3xl font-bold mb-6">فيديوهات: {{ course.title }}</h1>
+
+{% if videos %}
+<div class="grid grid-cols-1 gap-6">
+  {% for video in videos %}
+  <div class="bg-white rounded shadow p-6">
+    <h2 class="text-xl font-semibold mb-4">{{ video.title }}</h2>
+    
+    <div class="mb-4">
+      <video controls class="w-full max-w-4xl rounded">
+        <source src="{{ url_for('uploads', filename=video.file_path) }}" type="video/mp4">
+        متصفحك لا يدعم تشغيل الفيديو.
+      </video>
+    </div>
+    
+    {% set timestamps = video.get_timestamps() %}
+    {% if timestamps %}
+    <div class="bg-gray-50 p-4 rounded">
+      <h3 class="font-semibold mb-2">الفهرس:</h3>
+      <ul class="space-y-1">
+        {% for timestamp in timestamps %}
+        <li>
+          <button onclick="seekToTime('{{ loop.index0 }}', '{{ timestamp.time }}')" class="text-blue-500 hover:text-blue-700">
+            {{ timestamp.time }} - {{ timestamp.title }}
+          </button>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+
+<script>
+function seekToTime(videoIndex, timeString) {
+  const videos = document.querySelectorAll('video');
+  const video = videos[videoIndex];
+  if (video) {
+    const timeParts = timeString.split(':');
+    const seconds = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
+    video.currentTime = seconds;
+    video.play();
+  }
+}
+</script>
+{% else %}
+<div class="bg-white p-6 rounded shadow text-center">
+  <p class="text-gray-500">لا توجد فيديوهات متاحة لهذه الدورة بعد.</p>
+</div>
+{% endif %}
+
+<div class="mt-6">
+  <a href="{{ url_for('course_detail', slug=course.slug) }}" class="bg-gray-500 text-white px-4 py-2 rounded">العودة للدورة</a>
+</div>
+{% endblock %}

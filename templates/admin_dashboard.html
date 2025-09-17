@@ -1,0 +1,209 @@
+{% extends 'admin_base.html' %}
+
+{% block page_title %}
+  لوحة التحكم الرئيسية
+{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Students Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <div class="w-14 h-14 flex items-center justify-center bg-blue-100 dark:bg-blue-900/50 rounded-full">
+            <i data-lucide="users" class="w-7 h-7 text-blue-600 dark:text-blue-400"></i>
+        </div>
+        <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">إجمالي الطلاب</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ stats.total_students }}</p>
+        </div>
+    </div>
+
+    <!-- Courses Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <div class="w-14 h-14 flex items-center justify-center bg-green-100 dark:bg-green-900/50 rounded-full">
+            <i data-lucide="book-marked" class="w-7 h-7 text-green-600 dark:text-green-400"></i>
+        </div>
+        <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">إجمالي الدورات</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ stats.total_courses }}</p>
+        </div>
+    </div>
+
+    <!-- Messages Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <div class="w-14 h-14 flex items-center justify-center bg-orange-100 dark:bg-orange-900/50 rounded-full">
+            <i data-lucide="message-square" class="w-7 h-7 text-orange-600 dark:text-orange-400"></i>
+        </div>
+        <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">الرسائل الجديدة</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ stats.new_messages }}</p>
+        </div>
+    </div>
+
+    <!-- Revenue Card -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg flex items-center gap-5 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+        <div class="w-14 h-14 flex items-center justify-center bg-purple-100 dark:bg-purple-900/50 rounded-full">
+            <i data-lucide="dollar-sign" class="w-7 h-7 text-purple-600 dark:text-purple-400"></i>
+        </div>
+        <div>
+            <p class="text-gray-500 dark:text-gray-400 text-sm font-medium">الإيرادات (تقديري)</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">$0</p>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8 mb-8">
+    <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">نمو الطلاب</h3>
+        <div class="h-80">
+            <canvas id="studentsChart"></canvas>
+        </div>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-4">ملخص الدورات</h3>
+        <div class="h-80 flex items-center justify-center">
+            <canvas id="coursesChart"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<!-- Courses Management -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-2xl font-bold text-gray-800 dark:text-white">إدارة الدورات</h2>
+    <a href="{{ url_for('admin_new_course') }}" class="flex items-center bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors font-semibold">
+      <i data-lucide="plus" class="w-5 h-5 ml-2"></i>
+      <span>إضافة دورة جديدة</span>
+    </a>
+  </div>
+
+  {% if courses %}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for course in courses %}
+    <div class="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300 bg-white dark:bg-gray-800">
+      <div class="relative">
+        <img src="{{ url_for('uploads', filename=course.image) if course.image else 'https://placehold.co/600x400/3b82f6/ffffff?text=' + course.title }}" alt="{{ course.title }}" class="w-full h-48 object-cover">
+        <div class="absolute top-3 right-3 bg-primary-600 text-white text-xs font-bold px-2 py-1 rounded-md">{{ course.category }}</div>
+      </div>
+      <div class="p-5">
+        <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-2">{{ course.title }}</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 h-16 overflow-hidden">{{ course.short_desc }}</p>
+        <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <span class="flex items-center"><i data-lucide="users" class="w-4 h-4 ml-1"></i> {{ course.enrollments_count }} طلاب</span>
+          <span class="flex items-center"><i data-lucide="star" class="w-4 h-4 ml-1 text-yellow-500"></i> {{ '%.1f'|format(course.avg_rating) if course.avg_rating else 'N/A' }}</span>
+        </div>
+        <div class="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+          <a href="{{ url_for('admin_course_detail', course_id=course.id) }}" class="flex items-center text-primary-600 hover:text-primary-800 font-semibold">
+            <i data-lucide="settings" class="w-4 h-4 ml-1"></i>
+            إدارة
+          </a>
+          <a href="{{ url_for('admin_delete_course', id=course.id) }}" class="flex items-center text-red-600 hover:text-red-800 font-semibold" onclick="return confirm('هل أنت متأكد من حذف هذه الدورة؟ سيتم حذف جميع البيانات المتعلقة بها.')">
+            <i data-lucide="trash-2" class="w-4 h-4 ml-1"></i>
+            حذف
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="text-center py-12 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg">
+    <i data-lucide="book-open-check" class="w-16 h-16 mx-auto text-gray-400 dark:text-gray-500"></i>
+    <h3 class="mt-4 text-lg font-semibold text-gray-700 dark:text-white">لا توجد دورات بعد</h3>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">ابدأ بإضافة دورتك الأولى لجذب الطلاب.</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const isDarkMode = document.documentElement.classList.contains('dark');
+
+        const chartTextColor = isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+        const chartGridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+
+        // Dummy data for charts
+        const studentData = {
+            labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+            datasets: [{
+                label: 'طلاب جدد',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                tension: 0.4,
+                fill: true
+            }]
+        };
+
+        const courseData = {
+            labels: ['مكتملة', 'قيد التقدم', 'جديدة'],
+            datasets: [{
+                label: 'حالة الدورات',
+                data: [5, 10, 2],
+                backgroundColor: [
+                    'rgba(16, 185, 129, 0.7)',
+                    'rgba(245, 158, 11, 0.7)',
+                    'rgba(59, 130, 246, 0.7)'
+                ],
+                borderColor: isDarkMode ? '#1f2937' : '#fff',
+                borderWidth: 3,
+                hoverOffset: 8
+            }]
+        };
+
+        // Students Chart
+        const studentsCtx = document.getElementById('studentsChart').getContext('2d');
+        new Chart(studentsCtx, {
+            type: 'line',
+            data: studentData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: chartTextColor },
+                        grid: { color: chartGridColor }
+                    },
+                    x: {
+                        ticks: { color: chartTextColor },
+                        grid: { color: chartGridColor }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: chartTextColor
+                        }
+                    }
+                }
+            }
+        });
+
+        // Courses Chart
+        const coursesCtx = document.getElementById('coursesChart').getContext('2d');
+        new Chart(coursesCtx, {
+            type: 'doughnut',
+            data: courseData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: chartTextColor
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

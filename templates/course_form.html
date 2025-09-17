@@ -1,0 +1,95 @@
+{% extends 'admin_base.html' %}
+
+{% block page_title %}
+  {{ 'تعديل الدورة' if form.instance and form.instance.id else 'إضافة دورة جديدة' }}
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-between mb-6">
+    <a href="{{ url_for('admin_courses') }}" class="flex items-center text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+        <i data-lucide="arrow-right" class="w-5 h-5 mr-2"></i>
+        العودة إلى الدورات
+    </a>
+</div>
+
+<div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+    <h1 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">
+        {{ 'تعديل الدورة' if form.instance and form.instance.id else 'إضافة دورة جديدة' }}
+    </h1>
+
+    <form method="POST" enctype="multipart/form-data" novalidate>
+        {{ form.hidden_tag() }}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Course Title -->
+            <div>
+                {{ form.title.label(class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300") }}
+                {{ form.title(class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500") }}
+                {% for error in form.title.errors %}
+                    <span class="text-red-600 text-sm mt-1">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- Course Slug -->
+            <div>
+                {{ form.slug.label(class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300") }}
+                {{ form.slug(class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500") }}
+                {% for error in form.slug.errors %}
+                    <span class="text-red-600 text-sm mt-1">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- Short Description -->
+            <div class="md:col-span-2">
+                {{ form.short_desc.label(class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300") }}
+                {{ form.short_desc(class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", rows=3) }}
+                {% for error in form.short_desc.errors %}
+                    <span class="text-red-600 text-sm mt-1">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- Course Content -->
+            <div class="md:col-span-2">
+                {{ form.content.label(class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300") }}
+                {{ form.content(class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500", rows=6) }}
+                {% for error in form.content.errors %}
+                    <span class="text-red-600 text-sm mt-1">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- Course Price -->
+            <div>
+                {{ form.price.label(class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300") }}
+                {{ form.price(class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500") }}
+                {% for error in form.price.errors %}
+                    <span class="text-red-600 text-sm mt-1">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- Course Image -->
+            <div>
+                {{ form.image.label(class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300") }}
+                <div class="flex items-center justify-center w-full">
+                    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <i data-lucide="upload-cloud" class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"></i>
+                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">انقر للتحميل</span> أو اسحب وأفلت</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG or GIF (MAX. 800x400px)</p>
+                        </div>
+                        {{ form.image(id="dropzone-file", class="hidden") }}
+                    </label>
+                </div> 
+                {% for error in form.image.errors %}
+                    <span class="text-red-600 text-sm mt-1">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mt-8 flex justify-end">
+            <button type="submit" class="px-6 py-2.5 text-sm font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800">
+                {{ 'حفظ التغييرات' if form.instance and form.instance.id else 'إضافة الدورة' }}
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

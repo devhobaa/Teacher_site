@@ -1,0 +1,722 @@
+
+{% extends "base.html" %}
+{% block content %}
+<!-- Hero Section -->
+ <style>
+/* ===== About Section Styles - قسم التعريف ===== */
+
+/* استيراد الخطوط العربية */
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap');
+
+/* متغيرات الألوان */
+:root {
+  --primary-600: #ff6b35;
+  --primary-700: #f7931e;
+  --primary-800: #e8661f;
+  --primary-100: #fff5f0;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --white: #ffffff;
+}
+
+/* About Section Styles */
+.about-section {
+  padding: 5rem 0;
+  background: var(--white);
+  position: relative;
+}
+
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 49%, rgba(255, 107, 53, 0.02) 50%, transparent 51%);
+  background-size: 40px 40px;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .about-grid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+/* About Content */
+.about-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-800);
+  margin-bottom: 2rem;
+  font-family: 'Amiri', serif;
+  line-height: 1.2;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .about-content h2 {
+    font-size: 3rem;
+  }
+}
+
+.about-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  right: 0;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(45deg, var(--primary-600), var(--primary-700));
+  border-radius: 2px;
+}
+
+.about-description {
+  color: var(--gray-600);
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-family: 'Cairo', sans-serif;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--primary-100) 0%, #fef3f0 100%);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 107, 53, 0.1);
+}
+
+.stat-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+  background: linear-gradient(135deg, #fef5f2 0%, var(--primary-100) 100%);
+}
+
+.stat-icon {
+  background: linear-gradient(45deg, var(--primary-600), var(--primary-700));
+  padding: 0.75rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+  flex-shrink: 0;
+}
+
+.stat-icon i,
+.stat-icon [data-lucide] {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--white);
+}
+
+.stat-text {
+  color: var(--gray-700);
+  font-weight: 600;
+  font-size: 1.1rem;
+  font-family: 'Cairo', sans-serif;
+}
+
+/* Read More Link */
+.read-more-link {
+  color: var(--primary-600);
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.read-more-link:hover {
+  color: var(--primary-700);
+  border-bottom-color: var(--primary-600);
+  transform: translateX(-3px);
+}
+
+.read-more-link i,
+.read-more-link [data-lucide] {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.read-more-link:hover i,
+.read-more-link:hover [data-lucide] {
+  transform: translateX(-3px);
+}
+
+/* Image Section */
+.about-image-container {
+  text-align: center;
+  position: relative;
+}
+
+.about-image {
+  width: 20rem;
+  height: 20rem;
+  object-fit: cover;
+  border-radius: 1rem;
+  box-shadow: 0 25px 60px rgba(255, 107, 53, 0.25);
+  margin: 0 auto;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.about-image:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 35px 80px rgba(255, 107, 53, 0.3);
+}
+
+/* Decorative Elements */
+.about-image-container::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(45deg, var(--primary-600), var(--primary-700));
+  opacity: 0.1;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.about-image-container::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: -30px;
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, var(--primary-700), var(--primary-600));
+  opacity: 0.08;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  z-index: -1;
+}
+
+/* Floating Elements */
+.floating-element {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--primary-600);
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: float-gentle 4s ease-in-out infinite;
+}
+
+.floating-element:nth-child(1) {
+  top: 20%;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.floating-element:nth-child(2) {
+  top: 60%;
+  left: 85%;
+  animation-delay: 1.5s;
+}
+
+.floating-element:nth-child(3) {
+  top: 80%;
+  left: 20%;
+  animation-delay: 3s;
+}
+
+@keyframes float-gentle {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .about-content h2::after {
+    right: 50%;
+    transform: translateX(50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .about-section {
+    padding: 3rem 0;
+  }
+  
+  .about-container {
+    padding: 0 1rem;
+  }
+  
+  .about-grid {
+    gap: 2.5rem;
+  }
+  
+  .about-content h2 {
+    font-size: 2rem;
+  }
+  
+  .about-description {
+    font-size: 1.1rem;
+  }
+  
+  .about-image {
+    width: 18rem;
+    height: 18rem;
+  }
+  
+  .stats-grid {
+    gap: 1rem;
+  }
+  
+  .stat-item {
+    padding: 0.75rem;
+  }
+  
+  .stat-text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .about-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  .about-image {
+    width: 16rem;
+    height: 16rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-section {
+    padding: 2rem 0;
+  }
+  
+  .about-content h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-description {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-image {
+    width: 14rem;
+    height: 14rem;
+  }
+  
+  .stat-item {
+    gap: 0.75rem;
+  }
+  
+  .stat-icon {
+    padding: 0.5rem;
+  }
+  
+  .stat-text {
+    font-size: 0.95rem;
+  }
+}
+
+/* Animation Classes */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease;
+}
+
+.fade-in-up.animate {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.8s ease;
+}
+
+.fade-in-left.animate {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: all 0.8s ease;
+}
+
+.fade-in-right.animate {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger Animation Delays */
+.stagger-1 { transition-delay: 0.1s; }
+.stagger-2 { transition-delay: 0.2s; }
+.stagger-3 { transition-delay: 0.3s; }
+.stagger-4 { transition-delay: 0.4s; }
+
+/* Utility Classes for Manual Application */
+.bg-white { background-color: var(--white); }
+.py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+.container { max-width: 1200px; margin: 0 auto; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.text-center { text-align: center; }
+.grid { display: grid; }
+.grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+.gap-12 { gap: 3rem; }
+.items-center { align-items: center; }
+.text-3xl { font-size: 2rem; line-height: 2.5rem; }
+.font-bold { font-weight: 700; }
+.text-primary-800 { color: var(--primary-800); }
+.mb-6 { margin-bottom: 1.5rem; }
+.text-gray-600 { color: var(--gray-600); }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+.leading-relaxed { line-height: 1.625; }
+.flex { display: flex; }
+.bg-primary-100 { background-color: var(--primary-100); }
+.p-2 { padding: 0.5rem; }
+.rounded-lg { border-radius: 0.5rem; }
+.ml-3 { margin-left: 0.75rem; }
+.w-5 { width: 1.25rem; }
+.h-5 { height: 1.25rem; }
+.text-primary-600 { color: var(--primary-600); }
+.text-gray-700 { color: var(--gray-700); }
+.text-primary-600 { color: var(--primary-600); }
+.hover\:text-primary-700:hover { color: var(--primary-700); }
+.font-semibold { font-weight: 600; }
+.inline-flex { display: inline-flex; }
+.w-4 { width: 1rem; }
+.h-4 { height: 1rem; }
+.mr-2 { margin-right: 0.5rem; }
+.rounded-2xl { border-radius: 1rem; }
+.shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+.w-80 { width: 20rem; }
+.h-80 { height: 20rem; }
+.object-cover { object-fit: cover; }
+
+@media (min-width: 640px) {
+  .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 768px) {
+  .md\:text-4xl { font-size: 2.5rem; line-height: 1; }
+}
+
+@media (min-width: 1024px) {
+  .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+ </style>
+<section class="hero-section">
+  <div class="hero-content">
+    <h1 class="hero-title">
+      منصة الأستاذ<br>
+      <span class="hero-name">فضل عادل</span>
+    </h1>
+      <p class="hero-subtitle">
+      أهلاً بكم في عالم الرياضة الممتع!<br>
+      حيث نجعل التمارين واللياقة أصدقاءك المفضلين<br>
+      ونحول التعقيد إلى بساطة والصعوبة إلى متعة
+      </p>
+    <a href="#courses" class="cta-button">ابدأ رحلة التعلم</a>
+  </div>
+
+  <div class="profile-container">
+    <div class="profile-image" style="background: linear-gradient(45deg, #ff6b35, #f7931e); display: flex; align-items: center; justify-content: center; color: white; font-size: 4rem;">
+      <img src="{{ url_for('uploads', filename='T.fadl.jpg') }}"
+             alt="الأستاذ فضل عادل"
+             class="rounded-2xl shadow-2xl mx-auto w-80 h-80 object-cover">
+    </div>
+    
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+  <h2 class="section-title">
+    <i class="fas fa-star"></i>
+    مميزات منصتك؟
+  </h2>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-comments"></i>
+      </div>
+      <h3 class="feature-title">شرح تفاعلي</h3>
+      <p class="feature-description">
+        طرق شرح مبتكرة تجعل الرياضة سهلة ومفهومة
+        <br>مع تمارين خطوة بخطوة لجميع التمارين
+        <br>وأمثلة عملية من الحياة اليومية
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-chart-bar"></i>
+      </div>
+      <h3 class="feature-title">تدريب مكثف</h3>
+      <p class="feature-description">
+        تمارين متنوعة ومتدرجة الصعوبة
+        <br>لضمان إتقان جميع فروع الرياضة
+        <br>مع تقييم مستمر لمستوى التقدم
+      </p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon">
+        <i class="fas fa-trophy"></i>
+      </div>
+      <h3 class="feature-title">تحقيق النجاح</h3>
+      <p class="feature-description">
+        استراتيجيات مثبتة للحصول على أعلى الدرجات
+        <br>في الامتحانات والاختبارات المختلفة
+        <br>مع نصائح لحل التمارين بأسرع الطرق
+      </p>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- About Section -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="text-3xl md:text-4xl font-bold text-primary-800 mb-6">
+          من هو الأستاذ فضل عادل؟
+        </h2>
+        <p class="text-gray-600 text-lg mb-6 leading-relaxed">
+          مدرس رياضة متخصص بخبرة تزيد عن 15 عاماً في تدريس الرياضة للمرحلة الثانوية. 
+          حاصل على بكالوريوس التربية الرياضية من جامعة القاهرة وماجستير في التربية الرياضية.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div class="flex items-center">
+            <div class="bg-primary-100 p-2 rounded-lg ml-3">
+              <i data-lucide="award" class="w-5 h-5 text-primary-600"></i>
+            </div>
+            <span class="text-gray-700">+15 سنة خبرة</span>
+          </div>
+          <div class="flex items-center">
+            <div class="bg-primary-100 p-2 rounded-lg ml-3">
+              <i data-lucide="users" class="w-5 h-5 text-primary-600"></i>
+            </div>
+            <span class="text-gray-700">+1000 طالب</span>
+          </div>
+          <div class="flex items-center">
+            <div class="bg-primary-100 p-2 rounded-lg ml-3">
+              <i data-lucide="star" class="w-5 h-5 text-primary-600"></i>
+            </div>
+            <span class="text-gray-700">تقييم 5 نجوم</span>
+          </div>
+          <div class="flex items-center">
+            <div class="bg-primary-100 p-2 rounded-lg ml-3">
+              <i data-lucide="graduation-cap" class="w-5 h-5 text-primary-600"></i>
+            </div>
+            <span class="text-gray-700">نتائج ممتازة</span>
+          </div>
+        </div>
+        <a href="{{ url_for('about') }}" class="text-primary-600 hover:text-primary-700 font-semibold inline-flex items-center">
+          اقرأ المزيد
+          <i data-lucide="arrow-left" class="w-4 h-4 mr-2"></i>
+        </a>
+      </div>
+      <div class="text-center">
+        <img src="{{ url_for('uploads', filename='T.fadl.jpg') }}"
+             alt="الأستاذ فضل عادل"
+             class="rounded-2xl shadow-2xl mx-auto w-80 h-80 object-cover">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Courses Section -->
+<section id="courses" class="py-16 bg-gray-50 math-pattern">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-primary-800 mb-4">
+        أحدث الدورات
+      </h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        اختر من بين دوراتنا المتخصصة في الرياضة والمصممة خصيصاً لطلاب المرحلة الثانوية
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for course in featured_courses %}
+      <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+        <div class="h-48 bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center relative">
+          {% if course.image %}
+            <img src="{{ url_for('uploads', filename=course.image) }}" alt="{{ course.title }}" class="w-full h-full object-cover">
+          {% else %}
+            <i data-lucide="calculator" class="w-16 h-16 text-white"></i>
+          {% endif %}
+          
+          {% if course.featured %}
+          <div class="absolute top-4 right-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+            مميزة
+          </div>
+          {% endif %}
+        </div>
+        
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-800 mb-3">{{ course.title }}</h3>
+          <p class="text-gray-600 mb-4 leading-relaxed">{{ course.short_desc }}</p>
+          
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <span class="text-2xl font-bold text-primary-600">{{ course.price }}</span>
+              <span class="text-gray-500 mr-1">جنيه</span>
+            </div>
+            <div class="flex items-center text-yellow-500">
+              {% for i in range(5) %}
+                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+              {% endfor %}
+              <span class="text-gray-500 text-sm mr-1">(5.0)</span>
+            </div>
+          </div>
+          
+          <div class="flex items-center text-gray-500 text-sm mb-4">
+            <i data-lucide="clock" class="w-4 h-4 ml-1"></i>
+            <span>20 ساعة تدريبية</span>
+            <i data-lucide="users" class="w-4 h-4 ml-3 mr-1"></i>
+            <span>{{ course.students|length }} طالب</span>
+          </div>
+          
+          <a href="{{ url_for('course_detail', slug=course.slug) }}" 
+             class="w-full block bg-primary-600 text-white py-3 px-4 rounded-lg hover:bg-primary-700 transition-colors font-semibold text-center">
+            عرض التفاصيل
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    
+    <div class="text-center mt-12">
+      <a href="{{ url_for('courses') }}" 
+         class="bg-primary-600 text-white px-8 py-3 rounded-lg hover:bg-primary-700 transition-colors font-semibold inline-flex items-center">
+        <i data-lucide="book-open" class="w-5 h-5 ml-2"></i>
+        عرض جميع الدورات
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-primary-800 mb-4">
+        آراء الطلاب
+      </h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+        اكتشف ما يقوله طلابنا عن تجربتهم التعليمية معنا
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {% for testimonial in testimonials %}
+      <div class="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-shadow duration-300">
+        <div class="flex items-center mb-4">
+          {% for i in range(testimonial.rating) %}
+            <i data-lucide="star" class="w-5 h-5 text-yellow-500 fill-current"></i>
+          {% endfor %}
+        </div>
+        <p class="text-gray-700 mb-4 leading-relaxed">"{{ testimonial.content }}"</p>
+        <div class="flex items-center">
+          <div class="w-12 h-12 bg-primary-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+            {{ testimonial.student_name[0] }}
+          </div>
+          <div class="mr-3">
+            <h4 class="font-semibold text-gray-800">{{ testimonial.student_name }}</h4>
+            {% if testimonial.course %}
+              <p class="text-sm text-gray-600">{{ testimonial.course.title }}</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-16 bg-primary-600 text-white">
+  <div class="container mx-auto px-6 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">
+      ابدأ رحلتك التعليمية اليوم
+    </h2>
+    <p class="text-xl mb-8 text-primary-100 max-w-2xl mx-auto">
+      انضم إلى آلاف الطلاب الذين حققوا النجاح في الرياضة مع الأستاذ فضل عادل
+    </p>
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="{{ url_for('register') }}" 
+         class="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors inline-flex items-center justify-center">
+        <i data-lucide="user-plus" class="w-5 h-5 ml-2"></i>
+        سجل الآن مجاناً
+      </a>
+      <a href="{{ url_for('contact') }}" 
+         class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors inline-flex items-center justify-center">
+        <i data-lucide="phone" class="w-5 h-5 ml-2"></i>
+        تواصل معنا
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

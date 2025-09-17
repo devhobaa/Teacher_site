@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-primary-600 to-primary-800 text-white py-16">
+  <div class="container mx-auto px-6 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold mb-4">نتائج الامتحانات</h1>
+    <p class="text-xl text-primary-100">تابع تقدمك وتعرف على نتائجك</p>
+  </div>
+</section>
+
+<!-- Exam Results Section -->
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-6">
+    {% if results %}
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full table-auto text-right">
+          <thead class="bg-gray-100 border-b border-gray-200">
+            <tr>
+              <th class="px-6 py-4 text-sm font-semibold text-gray-600">الامتحان</th>
+              <th class="px-6 py-4 text-sm font-semibold text-gray-600">الدورة</th>
+              <th class="px-6 py-4 text-sm font-semibold text-gray-600">النتيجة</th>
+              <th class="px-6 py-4 text-sm font-semibold text-gray-600">تاريخ الأداء</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for result in results %}
+            <tr class="border-t border-gray-200 hover:bg-gray-50">
+              <td class="px-6 py-4 font-medium text-gray-800">{{ result.exam.title }}</td>
+              <td class="px-6 py-4 text-gray-600">{{ result.exam.course.title }}</td>
+              <td class="px-6 py-4">
+                <span class="px-3 py-1 rounded-full text-sm font-semibold {{ 'bg-green-100 text-green-800' if result.score >= 60 else 'bg-red-100 text-red-800' }}">
+                  {{ result.score }}%
+                </span>
+              </td>
+              <td class="px-6 py-4 text-gray-600">{{ result.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% else %}
+    <div class="text-center py-16">
+      <div class="bg-white rounded-2xl p-12 max-w-md mx-auto shadow-lg">
+        <i data-lucide="file-text" class="w-16 h-16 text-gray-400 mx-auto mb-4"></i>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">لم تؤد أي امتحانات بعد</h3>
+        <p class="text-gray-600 mb-6">عندما تكمل امتحاناً، ستظهر نتيجتك هنا</p>
+        <a href="{{ url_for('courses') }}" 
+           class="bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors">
+          تصفح الدورات
+        </a>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="mt-8 text-center">
+      <a href="{{ url_for('student_dashboard') }}" class="bg-white text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-100 transition-colors font-semibold border border-gray-300">
+        <i data-lucide="arrow-right" class="w-4 h-4 inline ml-2"></i>
+        العودة إلى لوحة التحكم
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}
